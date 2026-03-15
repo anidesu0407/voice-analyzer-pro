@@ -202,9 +202,9 @@
     <div class="upload-zone" id="dropZone">
       <label for="fileInput" style="cursor:pointer;display:block;">
         <span class="upload-icon">📂</span>
-        <p><strong>クリックまたはドラッグ＆ドロップ</strong><br>WAV・MP3・M4A・OGG など　※5秒以上推奨</p>
+        <p><strong>クリックまたはドラッグ＆ドロップ</strong><br>WAV・MP3・M4A・OGG・MP4(MOV) など　※5秒以上推奨</p>
       </label>
-      <input type="file" id="fileInput" accept="audio/*">
+      <input type="file" id="fileInput" accept="audio/*,video/*">
     </div>
     <div class="controls">
       <span class="file-name" id="fileName">ファイル未選択</span>
@@ -594,24 +594,37 @@ dropZone.addEventListener('dragover',e=>{e.preventDefault();dropZone.classList.a
 dropZone.addEventListener('dragleave',()=>dropZone.classList.remove('drag-over'));
 dropZone.addEventListener('drop',e=>{e.preventDefault();dropZone.classList.remove('drag-over');if(e.dataTransfer.files[0])loadFile(e.dataTransfer.files[0]);});
 
-async function loadFile(file){
-  if(!file||!file.type.startsWith('audio/'))return;
-  currentInputKey='file:'+(file.name||'unknown');
-  document.getElementById('fileName').textContent=file.name;
-  stopRecording(true);
-  resetAnalysisUI();
-  clearAudioSource();
-  try{
-    const ctx=getCtx();
-    const buf=await file.arrayBuffer();
-    audioBuffer=await ctx.decodeAudioData(buf);
-    const url=URL.createObjectURL(file);
-    setAudioSource(url);
-    analyzeBtn.disabled=false;
-    document.getElementById('micAnalyzeBtn').disabled=true;
-    drawWaveform();
-  }catch(e){alert('音声ファイルの読み込みに失敗しました。対応フォーマット（WAV・MP3・M4A・OGG）をお試しください。');}
-}
+  async function loadFile(file){
+    if(!file) return;
+    const type=(file.type||'').toLowerCase();
+    const name=(file.name||'').toLowerCase();
+    const isAudio=type.startsWith('audio/');
+    const isVideo=type.startsWith('video/');
+    const hasExt=name.endsWith('.wav')||name.endsWith('.mp3')||name.endsWith('.m4a')||name.endsWith('.ogg')||name.endsWith('.mp4')||name.endsWith('.mov')||name.endsWith('.m4v');
+    if(!(isAudio||isVideo||hasExt)) return;
+    currentInputKey='file:'+(file.name||'unknown');
+    document.getElementById('fileName').textContent=file.name;
+    stopRecording(true);
+    resetAnalysisUI();
+    clearAudioSource();
+    try{
+      const ctx=getCtx();
+      const buf=await file.arrayBuffer();
+      const url=URL.createObjectURL(file);
+      setAudioSource(url);
+      audioBuffer=await ctx.decodeAudioData(buf);
+      analyzeBtn.disabled=false;
+      document.getElementById('micAnalyzeBtn').disabled=true;
+      drawWaveform();
+    }catch(e){
+      analyzeBtn.disabled=true;
+      document.getElementById('micAnalyzeBtn').disabled=true;
+      const msg=isVideo
+        ? '動画の解析に失敗しました。音声だけ(m4a/wav)かマイクで録音を試してね。'
+        : '音声ファイルの読み込みに失敗しました。音声だけ(m4a/wav)かマイクで録音を試してね。';
+      alert(msg);
+    }
+  }
 analyzeBtn.addEventListener('click',()=>{if(audioBuffer)analyzeAudio();});
 
 // ============================================================
