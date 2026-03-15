@@ -60,6 +60,7 @@
   .upload-icon{font-size:2rem;margin-bottom:8px;display:block;opacity:.6;}
   .upload-zone p{color:var(--text-dim);font-size:.88rem;line-height:1.7;}
   .upload-zone strong{color:var(--accent);}
+  .upload-hint{margin-top:8px;font-size:.75rem;color:var(--text-dim);}
   .mic-zone{text-align:center;padding:20px 20px 8px;}
   .mic-btn{width:72px;height:72px;border-radius:50%;border:2px solid var(--accent);background:rgba(79,240,176,.08);color:var(--accent);font-size:1.8rem;cursor:pointer;transition:all .2s;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;}
   .mic-btn:hover{background:rgba(79,240,176,.18);box-shadow:var(--glow);}
@@ -206,6 +207,7 @@
       </label>
       <input type="file" id="fileInput" accept="audio/*,video/*">
     </div>
+    <div class="upload-hint">スマホでファイル選択できない場合は、マイク録音（右のタブ）がおすすめです。</div>
     <div class="controls">
       <span class="file-name" id="fileName">ファイル未選択</span>
       <button class="btn btn-primary" id="analyzeBtn" disabled>▶ 解析する</button>
