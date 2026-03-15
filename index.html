@@ -1970,7 +1970,8 @@ function tweetResult(){
   if(!lastResult)return;
   const r=lastResult;
   const verdict=r.vClass==='good'?'いい声認定！🎙️':'もう一息🎶';
-  const text=`自分の声を本格分析してみた！\n\n結果: ${verdict}\nスコア: ${r.totalScore}点\n基音: ${Math.round(r.meanPitch)}Hz / 倍音: ${r.detectedCount}/11個 / Jitter: ${r.jitter.toFixed(2)}%\n\n#いい声診断 #倍音分析 #VoiceAnalyzerPro`;
+  const url=(location&&location.href?location.href.split('#')[0]:'https://anidesu0407.github.io/voice-analyzer-pro/');
+  const text=`自分の声を本格分析してみた！\n\n結果: ${verdict}\nスコア: ${r.totalScore}点\n基音: ${Math.round(r.meanPitch)}Hz / 倍音: ${r.detectedCount}/11個 / Jitter: ${r.jitter.toFixed(2)}%\n\n${url}\n\n#ボイス診断 #声質分析 #VoiceAnalyzerPro`;
   window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text),'_blank');
 }
 
