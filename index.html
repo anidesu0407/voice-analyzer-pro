@@ -645,7 +645,13 @@ async function toggleRecording(){
     resetAnalysisUI();
     clearAudioSource();
     document.getElementById('micAnalyzeBtn').disabled=true;
-    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    const stream=await navigator.mediaDevices.getUserMedia({
+      audio:{
+        echoCancellation:false,
+        noiseSuppression:false,
+        autoGainControl:false
+      }
+    });
     recordedChunks=[];recordSeconds=0;
     const options=recorderMimeType?{mimeType:recorderMimeType}:undefined;
     try{
