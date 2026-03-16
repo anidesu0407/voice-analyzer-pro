@@ -1931,29 +1931,40 @@ function drawHarmonicCanvas(r){
   ctx.strokeStyle='#1e2330';ctx.lineWidth=1;
   ctx.beginPath();ctx.moveTo(30,450);ctx.lineTo(W-30,450);ctx.stroke();
 
-  // ── 数値データ行 ──
-  const stats=[
-    ['基音',Math.round(r.meanPitch)+'Hz'],
-    ['倍音数',r.detectedCount+'/11'],
-    ['Jitter',r.jitter.toFixed(2)+'%'],
-    ['Shimmer',r.shimmer.toFixed(1)+'dB'],
-    ['抑揚',r.intonationSemitones.toFixed(1)+'st'],
-  ];
-  const statW=(W-60)/stats.length;
-  stats.forEach((s,i)=>{
-    const sx=30+i*statW+statW/2;
-    ctx.fillStyle='#8a9ab0';ctx.font='9px monospace';ctx.textAlign='center';
-    ctx.fillText(s[0],sx,470);
-    ctx.fillStyle='#c8d0e0';ctx.font='bold 12px monospace';ctx.textAlign='center';
-    ctx.fillText(s[1],sx,487);
-  });
+    // ── 数値データ行 ──
+    const goodCol='#4ff0b0',warnCol='#ffd166',badCol='#ff6b6b',neutralCol='#c8d0e0';
+    const pitch=r.meanPitch;
+    const pitchGood=r.isFemale?(pitch>=165&&pitch<=260):(pitch>=85&&pitch<=165);
+    const pitchWarn=r.isFemale?(pitch>=145&&pitch<=300):(pitch>=70&&pitch<=200);
+    const pitchCol=pitchGood?goodCol:pitchWarn?warnCol:badCol;
+    const countCol=r.detectedCount>=9?goodCol:r.detectedCount>=5?warnCol:badCol;
+    const jitterCol=r.jitter<1.0?goodCol:r.jitter<2.0?warnCol:badCol;
+    const shimmerCol=r.shimmer<1.0?goodCol:r.shimmer<2.0?warnCol:badCol;
+    const into=r.intonationSemitones;
+    const intoCol=(into>=3&&into<=10)?goodCol:(into>=1?warnCol:badCol);
+
+    const stats=[
+      ['基音',Math.round(r.meanPitch)+'Hz',pitchCol],
+      ['倍音数',r.detectedCount+'/11',countCol],
+      ['Jitter',r.jitter.toFixed(2)+'%',jitterCol],
+      ['Shimmer',r.shimmer.toFixed(1)+'dB',shimmerCol],
+      ['抑揚',r.intonationSemitones.toFixed(1)+'st',intoCol],
+    ];
+    const statW=(W-60)/stats.length;
+    stats.forEach((s,i)=>{
+      const sx=30+i*statW+statW/2;
+      ctx.fillStyle='#8a9ab0';ctx.font='9px monospace';ctx.textAlign='center';
+      ctx.fillText(s[0],sx,470);
+      ctx.fillStyle=s[2]||neutralCol;ctx.font='bold 12px monospace';ctx.textAlign='center';
+      ctx.fillText(s[1],sx,487);
+    });
 
   // ── セパレーター（メトリクス説明） ──
   ctx.strokeStyle='#1e2330';ctx.lineWidth=1;
   ctx.beginPath();ctx.moveTo(30,510);ctx.lineTo(W-30,510);ctx.stroke();
 
     // ── METRICS 目安（理想値＋説明） ──
-    const metricsTop=522;
+    const metricsTop=528;
     ctx.fillStyle='#cfe3ff';ctx.font='bold 10px monospace';ctx.textAlign='left';
     ctx.fillText('METRICS 目安（理想値 + 説明）',30,metricsTop-10);
     // セクション下線
@@ -1962,6 +1973,7 @@ function drawHarmonicCanvas(r){
 
     const leftX=30,rightX=W/2+10;
     const rowGap=22,subGap=11;
+    const rowsStart=metricsTop+6;
     const rowsLeft=[
       {label:'基音  男性85〜165Hz / 女性165〜260Hz（参考）',desc:'声の高さの目安'},
       {label:'倍音数  11中9以上で高評価',desc:'深み・温かみの指標'},
@@ -1973,14 +1985,14 @@ function drawHarmonicCanvas(r){
       {label:'抑揚  3〜10半音が自然',desc:'高低差（表現幅）'}
     ];
     rowsLeft.forEach((r,i)=>{
-      const y=metricsTop+i*rowGap;
+      const y=rowsStart+i*rowGap;
       ctx.fillStyle='#c8d0e0';ctx.font='bold 9px sans-serif';
       ctx.fillText(r.label,leftX,y);
       ctx.fillStyle='#8a9ab0';ctx.font='9px sans-serif';
       ctx.fillText('・'+r.desc,leftX,y+subGap);
     });
     rowsRight.forEach((r,i)=>{
-      const y=metricsTop+i*rowGap;
+      const y=rowsStart+i*rowGap;
       ctx.fillStyle='#c8d0e0';ctx.font='bold 9px sans-serif';
       ctx.fillText(r.label,rightX,y);
       ctx.fillStyle='#8a9ab0';ctx.font='9px sans-serif';
@@ -1988,7 +2000,7 @@ function drawHarmonicCanvas(r){
     });
 
   // ── 倍音スペクトル（Hz） ──
-    const specTitleY=metricsTop+3*rowGap+14;
+    const specTitleY=rowsStart+3*rowGap+6;
   ctx.fillStyle='#c8d0e0';ctx.font='bold 10px monospace';ctx.textAlign='left';
   ctx.fillText('倍音スペクトル (Hz)',30,specTitleY);
   const specBox={x:30,y:specTitleY+10,w:W-60,h:120};
