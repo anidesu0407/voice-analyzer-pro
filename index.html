@@ -371,7 +371,7 @@
 
   <!-- 倍音スペクトル -->
   <div class="card-title" style="margin-top:4px">倍音スペクトル</div>
-  <div class="canvas-wrap" style="margin-bottom:14px;"><canvas id="harmonicCanvas" height="220"></canvas></div>
+  <div class="canvas-wrap" style="margin-bottom:14px;"><canvas id="harmonicCanvas" height="260"></canvas></div>
   <div class="harmonic-chart-wrap" id="harmonicChart"></div>
 
   <!-- アドバイス -->
@@ -1672,7 +1672,7 @@ function drawHarmonicCanvas(r){
   const canvas=document.getElementById('harmonicCanvas');
   const dpr=devicePixelRatio||1;
   const cssW=Math.max(1,canvas.clientWidth||canvas.offsetWidth||1);
-  const cssH=220;
+  const cssH=260;
   const W=Math.max(1,Math.round(cssW*dpr));
   const H=Math.max(1,Math.round(cssH*dpr));
   canvas.width=W;canvas.height=H;
@@ -1680,7 +1680,7 @@ function drawHarmonicCanvas(r){
   canvas.style.height=cssH+'px'; // CSS表示サイズを固定してぼやけ防止
   const ctx=canvas.getContext('2d');
   ctx.fillStyle='#080a0e';ctx.fillRect(0,0,W,H);
-  const pad={l:40*dpr,r:12*dpr,t:18*dpr,b:28*dpr};
+  const pad={l:40*dpr,r:12*dpr,t:26*dpr,b:32*dpr};
   const pw=W-pad.l-pad.r,ph=H-pad.t-pad.b;
   if(pw<=0||ph<=0)return;
   const minFreqShow=30,maxFreqShow=Math.min(r.meanPitch*13,8000);
@@ -2014,11 +2014,11 @@ function drawHarmonicCanvas(r){
     const specTitleY=rowsStart+3*rowGap+14;
   ctx.fillStyle='#c8d0e0';ctx.font='bold 10px monospace';ctx.textAlign='left';
   ctx.fillText('倍音スペクトル (Hz)',30,specTitleY);
-    const specBox={x:30,y:specTitleY+10,w:W-60,h:150};
+    const specBox={x:30,y:specTitleY+10,w:W-60,h:190};
   ctx.fillStyle='#080a0e';ctx.fillRect(specBox.x,specBox.y,specBox.w,specBox.h);
   ctx.strokeStyle='#1e2330';ctx.lineWidth=1;ctx.strokeRect(specBox.x,specBox.y,specBox.w,specBox.h);
     if(r.spectrum&&r.binHz&&r.half){
-      const pad={l:40,r:12,t:18,b:28};
+      const pad={l:40,r:12,t:24,b:32};
       const pw=specBox.w-pad.l-pad.r,ph=specBox.h-pad.t-pad.b;
       if(pw>0&&ph>0){
         const minFreqShow=30,maxFreqShow=Math.min(r.meanPitch*13,8000);
@@ -2115,13 +2115,13 @@ function drawHarmonicCanvas(r){
 
   // ── フッター ──
   ctx.strokeStyle='#1e2330';ctx.lineWidth=1;
-    ctx.beginPath();ctx.moveTo(30,860);ctx.lineTo(W-30,860);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(30,880);ctx.lineTo(W-30,880);ctx.stroke();
   ctx.fillStyle='#2a3040';ctx.font='10px monospace';ctx.textAlign='center';
-    ctx.fillText('voice-analyzer-pro',W/2,880);
+    ctx.fillText('voice-analyzer-pro',W/2,900);
 
   // ── ハッシュタグ ──
   ctx.fillStyle='#1e3040';ctx.font='9px monospace';ctx.textAlign='center';
-    ctx.fillText('#ボイス診断  #声質分析  #VoiceAnalyzerPro',W/2,898);
+    ctx.fillText('#ボイス診断  #声質分析  #VoiceAnalyzerPro',W/2,918);
 
   // ── 下部グロー ──
   const grd2=ctx.createRadialGradient(W/2,H,0,W/2,H,200);
