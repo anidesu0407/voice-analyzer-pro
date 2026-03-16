@@ -1735,10 +1735,12 @@ function drawHarmonicCanvas(r){
     ctx.strokeStyle=HARMONIC_COLORS[h]+'99';ctx.lineWidth=1.5*dpr;ctx.setLineDash([3*dpr,3*dpr]);
     ctx.beginPath();ctx.moveTo(x,pad.t+ph);ctx.lineTo(x,y+6*dpr);ctx.stroke();ctx.setLineDash([]);
     ctx.beginPath();ctx.arc(x,y,5*dpr,0,Math.PI*2);ctx.fillStyle=HARMONIC_COLORS[h];ctx.fill();
-    ctx.fillStyle=HARMONIC_COLORS[h];ctx.font=`bold ${10*dpr}px monospace`;ctx.textAlign='center';
-    ctx.fillText(h+1,x,y-18*dpr);
-    ctx.fillStyle=HARMONIC_COLORS[h]+'cc';ctx.font=`${9*dpr}px monospace`;
-    ctx.fillText((peakFreq>=1000?(peakFreq/1000).toFixed(1)+'k':Math.round(peakFreq))+'Hz',x,y-7*dpr);
+      const labelTop=pad.t+12*dpr;
+      const hzTop=pad.t+22*dpr;
+      ctx.fillStyle=HARMONIC_COLORS[h];ctx.font=`bold ${10*dpr}px monospace`;ctx.textAlign='center';
+      ctx.fillText(h+1,x,Math.max(labelTop,y-18*dpr));
+      ctx.fillStyle=HARMONIC_COLORS[h]+'cc';ctx.font=`${9*dpr}px monospace`;
+      ctx.fillText((peakFreq>=1000?(peakFreq/1000).toFixed(1)+'k':Math.round(peakFreq))+'Hz',x,Math.max(hzTop,y-7*dpr));
   }
   if(r.subHarmonics){
     r.subHarmonics.forEach(sh=>{
@@ -1757,8 +1759,9 @@ function drawHarmonicCanvas(r){
       const ds=5*dpr;
       ctx.beginPath();ctx.moveTo(x,y-ds);ctx.lineTo(x+ds,y);ctx.lineTo(x,y+ds);ctx.lineTo(x-ds,y);ctx.closePath();
       ctx.fillStyle=subColor;ctx.fill();
+      const subTop=pad.t+16*dpr;
       ctx.fillStyle=subColor;ctx.font=`bold ${8*dpr}px monospace`;ctx.textAlign='center';
-      ctx.fillText('÷'+sh.divisor,x,y-14*dpr);
+      ctx.fillText('÷'+sh.divisor,x,Math.max(subTop,y-14*dpr));
     });
   }
   // Hz軸ラベルは30Hzと統合済み
@@ -2076,10 +2079,12 @@ function drawHarmonicCanvas(r){
               ctx.strokeStyle=HARMONIC_COLORS[h]+'99';ctx.lineWidth=1.5;ctx.setLineDash([3,3]);
               ctx.beginPath();ctx.moveTo(x,baseY);ctx.lineTo(x,y+6);ctx.stroke();ctx.setLineDash([]);
               ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);ctx.fillStyle=HARMONIC_COLORS[h];ctx.fill();
+              const labelTop=specBox.y+pad.t+12;
+              const hzTop=specBox.y+pad.t+22;
               ctx.fillStyle=HARMONIC_COLORS[h];ctx.font='bold 10px monospace';ctx.textAlign='center';
-              ctx.fillText(h+1,x,y-18);
+              ctx.fillText(h+1,x,Math.max(labelTop,y-18));
               ctx.fillStyle=HARMONIC_COLORS[h]+'cc';ctx.font='9px monospace';
-              ctx.fillText((peakFreq>=1000?(peakFreq/1000).toFixed(1)+'k':Math.round(peakFreq))+'Hz',x,y-7);
+              ctx.fillText((peakFreq>=1000?(peakFreq/1000).toFixed(1)+'k':Math.round(peakFreq))+'Hz',x,Math.max(hzTop,y-7));
             }
             if(r.subHarmonics){
               r.subHarmonics.forEach(sh=>{
@@ -2098,8 +2103,9 @@ function drawHarmonicCanvas(r){
                 const ds=5;
                 ctx.beginPath();ctx.moveTo(x,y-ds);ctx.lineTo(x+ds,y);ctx.lineTo(x,y+ds);ctx.lineTo(x-ds,y);ctx.closePath();
                 ctx.fillStyle=subColor;ctx.fill();
+                const subTop=specBox.y+pad.t+16;
                 ctx.fillStyle=subColor;ctx.font='bold 8px monospace';ctx.textAlign='center';
-                ctx.fillText('÷'+sh.divisor,x,y-14);
+                ctx.fillText('÷'+sh.divisor,x,Math.max(subTop,y-14));
               });
             }
           }
