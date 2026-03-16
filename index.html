@@ -1946,9 +1946,9 @@ function drawHarmonicCanvas(r){
     const pitchIdeal=r.isFemale?'165〜260Hz':'85〜165Hz';
     const stats=[
       ['基音',`${Math.round(r.meanPitch)}Hz / ${pitchIdeal}`,pitchCol],
-      ['倍音数',`${r.detectedCount}/11 / 9/11`,countCol],
-      ['Jitter',`${r.jitter.toFixed(2)}% / 1.0%以下`,jitterCol],
-      ['Shimmer',`${r.shimmer.toFixed(1)}dB / 1.0dB以下`,shimmerCol],
+      ['倍音数',`${r.detectedCount}/11`,countCol],
+      ['Jitter',`${r.jitter.toFixed(2)}% / 1.0%（以下）`,jitterCol],
+      ['Shimmer',`${r.shimmer.toFixed(1)}dB / 1.0dB（以下）`,shimmerCol],
       ['抑揚',`${r.intonationSemitones.toFixed(1)}st / 3〜10st`,intoCol],
     ];
     const statW=(W-60)/stats.length;
