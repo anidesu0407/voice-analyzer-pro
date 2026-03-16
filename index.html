@@ -1735,8 +1735,8 @@ function drawHarmonicCanvas(r){
     ctx.strokeStyle=HARMONIC_COLORS[h]+'99';ctx.lineWidth=1.5*dpr;ctx.setLineDash([3*dpr,3*dpr]);
     ctx.beginPath();ctx.moveTo(x,pad.t+ph);ctx.lineTo(x,y+6*dpr);ctx.stroke();ctx.setLineDash([]);
     ctx.beginPath();ctx.arc(x,y,5*dpr,0,Math.PI*2);ctx.fillStyle=HARMONIC_COLORS[h];ctx.fill();
-      const labelTop=pad.t+6*dpr;
-      const hzTop=pad.t+18*dpr;
+      const labelTop=pad.t+12*dpr;
+      const hzTop=pad.t+24*dpr;
       ctx.textBaseline='top';
       ctx.fillStyle=HARMONIC_COLORS[h];ctx.font=`bold ${10*dpr}px monospace`;ctx.textAlign='center';
       ctx.fillText(h+1,x,Math.max(labelTop,y-18*dpr));
@@ -1760,7 +1760,7 @@ function drawHarmonicCanvas(r){
       const ds=5*dpr;
       ctx.beginPath();ctx.moveTo(x,y-ds);ctx.lineTo(x+ds,y);ctx.lineTo(x,y+ds);ctx.lineTo(x-ds,y);ctx.closePath();
       ctx.fillStyle=subColor;ctx.fill();
-      const subTop=pad.t+12*dpr;
+      const subTop=pad.t+18*dpr;
       ctx.textBaseline='top';
         ctx.fillStyle=subColor;ctx.font=`bold ${8*dpr}px monospace`;ctx.textAlign='center';
         ctx.fillText('÷'+sh.divisor,x,Math.max(subTop,y-14*dpr));
@@ -2082,8 +2082,8 @@ function drawHarmonicCanvas(r){
               ctx.strokeStyle=HARMONIC_COLORS[h]+'99';ctx.lineWidth=1.5;ctx.setLineDash([3,3]);
               ctx.beginPath();ctx.moveTo(x,baseY);ctx.lineTo(x,y+6);ctx.stroke();ctx.setLineDash([]);
               ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);ctx.fillStyle=HARMONIC_COLORS[h];ctx.fill();
-              const labelTop=specBox.y+pad.t+6;
-              const hzTop=specBox.y+pad.t+18;
+              const labelTop=specBox.y+pad.t+12;
+              const hzTop=specBox.y+pad.t+24;
               ctx.textBaseline='top';
               ctx.fillStyle=HARMONIC_COLORS[h];ctx.font='bold 10px monospace';ctx.textAlign='center';
               ctx.fillText(h+1,x,Math.max(labelTop,y-18));
@@ -2107,7 +2107,7 @@ function drawHarmonicCanvas(r){
                 const ds=5;
                 ctx.beginPath();ctx.moveTo(x,y-ds);ctx.lineTo(x+ds,y);ctx.lineTo(x,y+ds);ctx.lineTo(x-ds,y);ctx.closePath();
                 ctx.fillStyle=subColor;ctx.fill();
-                const subTop=specBox.y+pad.t+12;
+                const subTop=specBox.y+pad.t+18;
                 ctx.textBaseline='top';
                 ctx.fillStyle=subColor;ctx.font='bold 8px monospace';ctx.textAlign='center';
                 ctx.fillText('÷'+sh.divisor,x,Math.max(subTop,y-14));
