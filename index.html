@@ -1973,17 +1973,17 @@ function drawHarmonicCanvas(r){
     ctx.beginPath();ctx.moveTo(30,metricsTop-6);ctx.lineTo(W-30,metricsTop-6);ctx.stroke();
 
     const leftX=30,rightX=W/2+10;
-    const rowGap=24,subGap=13;
+    const rowGap=26,subGap=14;
     const rowsStart=metricsTop+18;
-    const idealCol='#ffd166';
+    const idealCol='#7eb8ff';
     const rowsLeft=[
       {title:'基音',ideal:'男性85〜165Hz / 女性165〜260Hz（参考）',desc:'声の高さの目安'},
       {title:'倍音数',ideal:'11中9以上で高評価',desc:'深み・温かみの指標'},
       {title:'1/fゆらぎ',ideal:'−0.7〜−1.3 が理想',desc:'心地よさの指標'}
     ];
     const rowsRight=[
-      {title:'Jitter',ideal:'1%以下で安定',desc:'ピッチのブレ'},
-      {title:'Shimmer',ideal:'1dB以下で安定',desc:'音量のブレ'},
+      {title:'Jitter',ideal:'1%以下で安定（以下）',desc:'ピッチのブレ'},
+      {title:'Shimmer',ideal:'1dB以下で安定（以下）',desc:'音量のブレ'},
       {title:'抑揚',ideal:'3〜10半音が自然',desc:'高低差（表現幅）'}
     ];
     rowsLeft.forEach((r,i)=>{
@@ -2008,7 +2008,7 @@ function drawHarmonicCanvas(r){
     });
 
   // ── 倍音スペクトル（Hz） ──
-    const specTitleY=rowsStart+3*rowGap+6;
+    const specTitleY=rowsStart+3*rowGap+14;
   ctx.fillStyle='#c8d0e0';ctx.font='bold 10px monospace';ctx.textAlign='left';
   ctx.fillText('倍音スペクトル (Hz)',30,specTitleY);
   const specBox={x:30,y:specTitleY+10,w:W-60,h:120};
