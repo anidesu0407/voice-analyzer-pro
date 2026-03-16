@@ -1735,13 +1735,20 @@ function drawHarmonicCanvas(r){
     ctx.strokeStyle=HARMONIC_COLORS[h]+'99';ctx.lineWidth=1.5*dpr;ctx.setLineDash([3*dpr,3*dpr]);
     ctx.beginPath();ctx.moveTo(x,pad.t+ph);ctx.lineTo(x,y+6*dpr);ctx.stroke();ctx.setLineDash([]);
     ctx.beginPath();ctx.arc(x,y,5*dpr,0,Math.PI*2);ctx.fillStyle=HARMONIC_COLORS[h];ctx.fill();
-      const labelTop=pad.t+12*dpr;
-      const hzTop=pad.t+24*dpr;
-      ctx.textBaseline='top';
-      ctx.fillStyle=HARMONIC_COLORS[h];ctx.font=`bold ${10*dpr}px monospace`;ctx.textAlign='center';
-      ctx.fillText(h+1,x,Math.max(labelTop,y-18*dpr));
-      ctx.fillStyle=HARMONIC_COLORS[h]+'cc';ctx.font=`${9*dpr}px monospace`;
-      ctx.fillText((peakFreq>=1000?(peakFreq/1000).toFixed(1)+'k':Math.round(peakFreq))+'Hz',x,Math.max(hzTop,y-7*dpr));
+      const numY=Math.max(pad.t+8*dpr,y-16*dpr);
+      const hzY=Math.min(pad.t+ph-8*dpr,y+14*dpr);
+      ctx.textBaseline='middle';
+      ctx.textAlign='center';
+      ctx.font=`bold ${10*dpr}px monospace`;
+      ctx.lineWidth=3*dpr;ctx.strokeStyle='rgba(0,0,0,0.6)';
+      ctx.strokeText(h+1,x,numY);
+      ctx.fillStyle=HARMONIC_COLORS[h];
+      ctx.fillText(h+1,x,numY);
+      ctx.font=`${9*dpr}px monospace`;
+      ctx.lineWidth=3*dpr;ctx.strokeStyle='rgba(0,0,0,0.6)';
+      ctx.strokeText((peakFreq>=1000?(peakFreq/1000).toFixed(1)+'k':Math.round(peakFreq))+'Hz',x,hzY);
+      ctx.fillStyle=HARMONIC_COLORS[h]+'cc';
+      ctx.fillText((peakFreq>=1000?(peakFreq/1000).toFixed(1)+'k':Math.round(peakFreq))+'Hz',x,hzY);
   }
     if(r.subHarmonics){
       r.subHarmonics.forEach(sh=>{
@@ -1760,10 +1767,14 @@ function drawHarmonicCanvas(r){
       const ds=5*dpr;
       ctx.beginPath();ctx.moveTo(x,y-ds);ctx.lineTo(x+ds,y);ctx.lineTo(x,y+ds);ctx.lineTo(x-ds,y);ctx.closePath();
       ctx.fillStyle=subColor;ctx.fill();
-      const subTop=pad.t+18*dpr;
-      ctx.textBaseline='top';
-        ctx.fillStyle=subColor;ctx.font=`bold ${8*dpr}px monospace`;ctx.textAlign='center';
-        ctx.fillText('÷'+sh.divisor,x,Math.max(subTop,y-14*dpr));
+      const subY=Math.max(pad.t+10*dpr,y-12*dpr);
+      ctx.textBaseline='middle';
+      ctx.textAlign='center';
+      ctx.font=`bold ${8*dpr}px monospace`;
+      ctx.lineWidth=2*dpr;ctx.strokeStyle='rgba(0,0,0,0.6)';
+      ctx.strokeText('÷'+sh.divisor,x,subY);
+      ctx.fillStyle=subColor;
+      ctx.fillText('÷'+sh.divisor,x,subY);
       });
     }
     ctx.textBaseline='alphabetic';
@@ -2082,13 +2093,20 @@ function drawHarmonicCanvas(r){
               ctx.strokeStyle=HARMONIC_COLORS[h]+'99';ctx.lineWidth=1.5;ctx.setLineDash([3,3]);
               ctx.beginPath();ctx.moveTo(x,baseY);ctx.lineTo(x,y+6);ctx.stroke();ctx.setLineDash([]);
               ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);ctx.fillStyle=HARMONIC_COLORS[h];ctx.fill();
-              const labelTop=specBox.y+pad.t+12;
-              const hzTop=specBox.y+pad.t+24;
-              ctx.textBaseline='top';
-              ctx.fillStyle=HARMONIC_COLORS[h];ctx.font='bold 10px monospace';ctx.textAlign='center';
-              ctx.fillText(h+1,x,Math.max(labelTop,y-18));
-              ctx.fillStyle=HARMONIC_COLORS[h]+'cc';ctx.font='9px monospace';
-              ctx.fillText((peakFreq>=1000?(peakFreq/1000).toFixed(1)+'k':Math.round(peakFreq))+'Hz',x,Math.max(hzTop,y-7));
+              const numY=Math.max(specBox.y+pad.t+8,y-16);
+              const hzY=Math.min(specBox.y+pad.t+ph-8,y+14);
+              ctx.textBaseline='middle';
+              ctx.textAlign='center';
+              ctx.font='bold 10px monospace';
+              ctx.lineWidth=3;ctx.strokeStyle='rgba(0,0,0,0.6)';
+              ctx.strokeText(h+1,x,numY);
+              ctx.fillStyle=HARMONIC_COLORS[h];
+              ctx.fillText(h+1,x,numY);
+              ctx.font='9px monospace';
+              ctx.lineWidth=3;ctx.strokeStyle='rgba(0,0,0,0.6)';
+              ctx.strokeText((peakFreq>=1000?(peakFreq/1000).toFixed(1)+'k':Math.round(peakFreq))+'Hz',x,hzY);
+              ctx.fillStyle=HARMONIC_COLORS[h]+'cc';
+              ctx.fillText((peakFreq>=1000?(peakFreq/1000).toFixed(1)+'k':Math.round(peakFreq))+'Hz',x,hzY);
             }
             if(r.subHarmonics){
               r.subHarmonics.forEach(sh=>{
@@ -2107,10 +2125,14 @@ function drawHarmonicCanvas(r){
                 const ds=5;
                 ctx.beginPath();ctx.moveTo(x,y-ds);ctx.lineTo(x+ds,y);ctx.lineTo(x,y+ds);ctx.lineTo(x-ds,y);ctx.closePath();
                 ctx.fillStyle=subColor;ctx.fill();
-                const subTop=specBox.y+pad.t+18;
-                ctx.textBaseline='top';
-                ctx.fillStyle=subColor;ctx.font='bold 8px monospace';ctx.textAlign='center';
-                ctx.fillText('÷'+sh.divisor,x,Math.max(subTop,y-14));
+                const subY=Math.max(specBox.y+pad.t+10,y-12);
+                ctx.textBaseline='middle';
+                ctx.textAlign='center';
+                ctx.font='bold 8px monospace';
+                ctx.lineWidth=2;ctx.strokeStyle='rgba(0,0,0,0.6)';
+                ctx.strokeText('÷'+sh.divisor,x,subY);
+                ctx.fillStyle=subColor;
+                ctx.fillText('÷'+sh.divisor,x,subY);
               });
             }
             ctx.textBaseline='alphabetic';
