@@ -1943,19 +1943,20 @@ function drawHarmonicCanvas(r){
     const into=r.intonationSemitones;
     const intoCol=(into>=3&&into<=10)?goodCol:(into>=1?warnCol:badCol);
 
+    const pitchIdeal=r.isFemale?'165〜260Hz':'85〜165Hz';
     const stats=[
-      ['基音',Math.round(r.meanPitch)+'Hz',pitchCol],
-      ['倍音数',r.detectedCount+'/11',countCol],
-      ['Jitter',r.jitter.toFixed(2)+'%',jitterCol],
-      ['Shimmer',r.shimmer.toFixed(1)+'dB',shimmerCol],
-      ['抑揚',r.intonationSemitones.toFixed(1)+'st',intoCol],
+      ['基音',`${Math.round(r.meanPitch)}Hz / ${pitchIdeal}`,pitchCol],
+      ['倍音数',`${r.detectedCount}/11 / 9/11`,countCol],
+      ['Jitter',`${r.jitter.toFixed(2)}% / 1.0%`,jitterCol],
+      ['Shimmer',`${r.shimmer.toFixed(1)}dB / 1.0dB`,shimmerCol],
+      ['抑揚',`${r.intonationSemitones.toFixed(1)}st / 3〜10st`,intoCol],
     ];
     const statW=(W-60)/stats.length;
     stats.forEach((s,i)=>{
       const sx=30+i*statW+statW/2;
       ctx.fillStyle='#8a9ab0';ctx.font='9px monospace';ctx.textAlign='center';
       ctx.fillText(s[0],sx,470);
-      ctx.fillStyle=s[2]||neutralCol;ctx.font='bold 12px monospace';ctx.textAlign='center';
+      ctx.fillStyle=s[2]||neutralCol;ctx.font='bold 10px monospace';ctx.textAlign='center';
       ctx.fillText(s[1],sx,487);
     });
 
@@ -1964,7 +1965,7 @@ function drawHarmonicCanvas(r){
   ctx.beginPath();ctx.moveTo(30,510);ctx.lineTo(W-30,510);ctx.stroke();
 
     // ── METRICS 目安（理想値＋説明） ──
-    const metricsTop=528;
+    const metricsTop=534;
     ctx.fillStyle='#cfe3ff';ctx.font='bold 10px monospace';ctx.textAlign='left';
     ctx.fillText('METRICS 目安（理想値 + 説明）',30,metricsTop-10);
     // セクション下線
@@ -1973,7 +1974,7 @@ function drawHarmonicCanvas(r){
 
     const leftX=30,rightX=W/2+10;
     const rowGap=22,subGap=11;
-    const rowsStart=metricsTop+6;
+    const rowsStart=metricsTop+14;
     const rowsLeft=[
       {label:'基音  男性85〜165Hz / 女性165〜260Hz（参考）',desc:'声の高さの目安'},
       {label:'倍音数  11中9以上で高評価',desc:'深み・温かみの指標'},
