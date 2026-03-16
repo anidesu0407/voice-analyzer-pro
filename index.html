@@ -1973,7 +1973,7 @@ function drawHarmonicCanvas(r){
     ctx.beginPath();ctx.moveTo(30,metricsTop-6);ctx.lineTo(W-30,metricsTop-6);ctx.stroke();
 
     const leftX=30,rightX=W/2+10;
-    const rowGap=32,subGap=14;
+    const rowGap=34,subGap=14;
     const rowsStart=metricsTop+18;
     const idealCol='#7eb8ff';
     const rowsLeft=[
@@ -2014,42 +2014,97 @@ function drawHarmonicCanvas(r){
   const specBox={x:30,y:specTitleY+10,w:W-60,h:120};
   ctx.fillStyle='#080a0e';ctx.fillRect(specBox.x,specBox.y,specBox.w,specBox.h);
   ctx.strokeStyle='#1e2330';ctx.lineWidth=1;ctx.strokeRect(specBox.x,specBox.y,specBox.w,specBox.h);
-  if(r.spectrum&&r.binHz&&r.half){
-    const minFreqShow=30,maxFreqShow=Math.min(r.meanPitch*13,8000);
-    const minBin=Math.max(1,Math.floor(minFreqShow/r.binHz));
-    const maxBin=Math.min(Math.ceil(maxFreqShow/r.binHz),r.half-1);
-    let specMax=0;for(let b=minBin;b<=maxBin;b++)if(r.spectrum[b]>specMax)specMax=r.spectrum[b];
-    if(specMax>0){
-      ctx.strokeStyle='rgba(79,240,176,0.8)';ctx.lineWidth=1.2;
-      ctx.beginPath();
-      for(let i=0;i<specBox.w;i++){
-        const b=Math.max(minBin,Math.min(maxBin,Math.round(minBin+(i/specBox.w)*(maxBin-minBin))));
-        const y=specBox.y+specBox.h-(r.spectrum[b]/specMax)*specBox.h*0.9;
-        i===0?ctx.moveTo(specBox.x+i,y):ctx.lineTo(specBox.x+i,y);
-      }
-      ctx.stroke();
-      ctx.fillStyle='#3a4050';ctx.font='8px monospace';
-      ctx.fillText('30Hz',specBox.x+2,specBox.y+specBox.h+12);
-      ctx.textAlign='right';
-      ctx.fillText(Math.round(maxFreqShow/1000)>=1?(maxFreqShow/1000).toFixed(1)+'kHz':Math.round(maxFreqShow)+'Hz',specBox.x+specBox.w-2,specBox.y+specBox.h+12);
-        ctx.textAlign='left';
-      }
-    }
+    if(r.spectrum&&r.binHz&&r.half){
+      const pad={l:40,r:12,t:12,b:24};
+      const pw=specBox.w-pad.l-pad.r,ph=specBox.h-pad.t-pad.b;
+      if(pw>0&&ph>0){
+        const minFreqShow=30,maxFreqShow=Math.min(r.meanPitch*13,8000);
+        const minBin=Math.max(1,Math.floor(minFreqShow/r.binHz));
+        const maxBin=Math.min(Math.ceil(maxFreqShow/r.binHz),r.half-1);
+        const freqRange=maxFreqShow-minFreqShow;
+        if(freqRange>0){
+          let specMax=0;for(let b=minBin;b<=maxBin;b++)if(r.spectrum[b]>specMax)specMax=r.spectrum[b];
+          if(specMax>0){
+            const toX=freq=>specBox.x+pad.l+((freq-minFreqShow)/freqRange)*pw;
+            const baseY=specBox.y+pad.t+ph;
 
-    // 検出Hz（倍音）
-    if(r.harmonicRatios&&r.meanPitch){
-      const detected=[];
-      for(let i=1;i<r.harmonicRatios.length;i++){
-        if(r.harmonicRatios[i]>=0.10){
-          detected.push(Math.round(r.meanPitch*(i+1)));
+            ctx.strokeStyle='rgba(30,35,48,0.8)';ctx.lineWidth=1;
+            for(let i=1;i<=3;i++){
+              const y=specBox.y+pad.t+ph/4*i;
+              ctx.beginPath();ctx.moveTo(specBox.x+pad.l,y);ctx.lineTo(specBox.x+pad.l+pw,y);ctx.stroke();
+            }
+            let tickStep=100;if(maxFreqShow>3000)tickStep=500;if(maxFreqShow>6000)tickStep=1000;
+            ctx.fillStyle='#3a4050';ctx.font='8px monospace';ctx.textAlign='left';
+            ctx.fillText('30Hz',specBox.x+pad.l,baseY+12);
+            const freqTicks=[];
+            for(let f=tickStep;f<maxFreqShow;f+=tickStep){if(f>=minFreqShow)freqTicks.push(f);}
+            ctx.strokeStyle='rgba(30,35,48,0.6)';ctx.lineWidth=1;
+            freqTicks.forEach(f=>{
+              const x=toX(f);ctx.beginPath();ctx.moveTo(x,specBox.y+pad.t);ctx.lineTo(x,baseY);ctx.stroke();
+              ctx.fillStyle='#3a4050';ctx.font='8px monospace';ctx.textAlign='center';
+              ctx.fillText(f>=1000?(f/1000).toFixed(f%1000===0?0:1)+'k':f+'',x,baseY+12);
+            });
+
+            ctx.beginPath();ctx.strokeStyle='rgba(79,240,176,0.5)';ctx.lineWidth=1.2;
+            let first=true;
+            for(let b=minBin;b<=maxBin;b++){
+              const freq=b*r.binHz,x=toX(freq),y=specBox.y+pad.t+ph-(r.spectrum[b]/specMax)*ph*0.95;
+              if(first){ctx.moveTo(x,y);first=false;}else ctx.lineTo(x,y);
+            }
+            ctx.stroke();
+            ctx.beginPath();
+            first=true;
+            for(let b=minBin;b<=maxBin;b++){
+              const freq=b*r.binHz,x=toX(freq),y=specBox.y+pad.t+ph-(r.spectrum[b]/specMax)*ph*0.95;
+              if(first){ctx.moveTo(x,y);first=false;}else ctx.lineTo(x,y);
+            }
+            ctx.lineTo(toX(maxBin*r.binHz),baseY);ctx.lineTo(toX(minFreqShow),baseY);ctx.closePath();
+            ctx.fillStyle='rgba(79,240,176,0.06)';ctx.fill();
+
+            for(let h=0;h<12;h++){
+              const centerHz=r.meanPitch*(h+1);
+              if(centerHz>maxFreqShow||centerHz<minFreqShow)continue;
+              const band=getHarmonicBand(centerHz,h+1);
+              const loHz=Math.max(minFreqShow,band.loHz),hiHz=band.hiHz;
+              const loBin=Math.max(minBin,Math.round(loHz/r.binHz));
+              const hiBin=Math.min(Math.round(hiHz/r.binHz),r.half-1);
+              let peakBin=loBin,peakAmp=0;
+              for(let b=loBin;b<=hiBin;b++){if(r.spectrum[b]>peakAmp){peakAmp=r.spectrum[b];peakBin=b;}}
+              const peakFreq=peakBin*r.binHz;
+              if(peakFreq<minFreqShow||peakFreq>maxFreqShow)continue;
+              const x=toX(peakFreq),y=specBox.y+pad.t+ph-(peakAmp/specMax)*ph*0.95;
+              ctx.strokeStyle=HARMONIC_COLORS[h]+'99';ctx.lineWidth=1.5;ctx.setLineDash([3,3]);
+              ctx.beginPath();ctx.moveTo(x,baseY);ctx.lineTo(x,y+6);ctx.stroke();ctx.setLineDash([]);
+              ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);ctx.fillStyle=HARMONIC_COLORS[h];ctx.fill();
+              ctx.fillStyle=HARMONIC_COLORS[h];ctx.font='bold 10px monospace';ctx.textAlign='center';
+              ctx.fillText(h+1,x,y-18);
+              ctx.fillStyle=HARMONIC_COLORS[h]+'cc';ctx.font='9px monospace';
+              ctx.fillText((peakFreq>=1000?(peakFreq/1000).toFixed(1)+'k':Math.round(peakFreq))+'Hz',x,y-7);
+            }
+            if(r.subHarmonics){
+              r.subHarmonics.forEach(sh=>{
+                if(!sh.detected||sh.hz<minFreqShow||sh.hz>maxFreqShow)return;
+                const band=getHarmonicBand(sh.hz);
+                const loHz=Math.max(minFreqShow,band.loHz),hiHz=band.hiHz;
+                const loBin=Math.max(1,Math.round(loHz/r.binHz));
+                const hiBin=Math.min(Math.round(hiHz/r.binHz),r.half-1);
+                let peakBin=loBin,peakAmp=0;
+                for(let b=loBin;b<=hiBin;b++){if(r.spectrum[b]>peakAmp){peakAmp=r.spectrum[b];peakBin=b;}}
+                const peakFreq=peakBin*r.binHz;
+                const x=toX(peakFreq),y=specBox.y+pad.t+ph-(peakAmp/specMax)*ph*0.95;
+                const subColor='#ffa040';
+                ctx.strokeStyle=subColor+'88';ctx.lineWidth=1.5;ctx.setLineDash([2,4]);
+                ctx.beginPath();ctx.moveTo(x,baseY);ctx.lineTo(x,y+8);ctx.stroke();ctx.setLineDash([]);
+                const ds=5;
+                ctx.beginPath();ctx.moveTo(x,y-ds);ctx.lineTo(x+ds,y);ctx.lineTo(x,y+ds);ctx.lineTo(x-ds,y);ctx.closePath();
+                ctx.fillStyle=subColor;ctx.fill();
+                ctx.fillStyle=subColor;ctx.font='bold 8px monospace';ctx.textAlign='center';
+                ctx.fillText('÷'+sh.divisor,x,y-14);
+              });
+            }
+          }
         }
       }
-      const maxItems=10;
-      const list=detected.slice(0,maxItems).map(hz=>hz+'Hz').join(', ');
-      const tail=detected.length>maxItems?' …':'';
-      const label=detected.length?`検出Hz: ${list}${tail}`:'検出Hz: なし';
-      ctx.fillStyle='#7eb8ff';ctx.font='8px monospace';ctx.textAlign='left';
-      ctx.fillText(label,specBox.x,specBox.y+specBox.h+28);
     }
 
   // ── フッター ──
