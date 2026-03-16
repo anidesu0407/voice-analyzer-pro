@@ -1947,8 +1947,8 @@ function drawHarmonicCanvas(r){
     const stats=[
       ['基音',`${Math.round(r.meanPitch)}Hz / ${pitchIdeal}`,pitchCol],
       ['倍音数',`${r.detectedCount}/11`,countCol],
-      ['Jitter',`${r.jitter.toFixed(2)}% / 1.0%（以下）`,jitterCol],
-      ['Shimmer',`${r.shimmer.toFixed(1)}dB / 1.0dB（以下）`,shimmerCol],
+      ['Jitter',`${r.jitter.toFixed(2)}% / 1.0%`,jitterCol],
+      ['Shimmer',`${r.shimmer.toFixed(1)}dB / 1.0dB`,shimmerCol],
       ['抑揚',`${r.intonationSemitones.toFixed(1)}st / 3〜10st`,intoCol],
     ];
     const statW=(W-60)/stats.length;
@@ -1973,7 +1973,7 @@ function drawHarmonicCanvas(r){
     ctx.beginPath();ctx.moveTo(30,metricsTop-6);ctx.lineTo(W-30,metricsTop-6);ctx.stroke();
 
     const leftX=30,rightX=W/2+10;
-    const rowGap=28,subGap=13;
+    const rowGap=30,subGap=14;
     const rowsStart=metricsTop+18;
     const idealCol='#7eb8ff';
     const rowsLeft=[
@@ -1982,8 +1982,8 @@ function drawHarmonicCanvas(r){
       {title:'1/fゆらぎ',ideal:'−0.7〜−1.3 が理想',desc:'心地よさの指標'}
     ];
     const rowsRight=[
-      {title:'Jitter',ideal:'1%以下で安定（以下）',desc:'ピッチのブレ'},
-      {title:'Shimmer',ideal:'1dB以下で安定（以下）',desc:'音量のブレ'},
+      {title:'Jitter',ideal:'1%以下で安定',desc:'ピッチのブレ'},
+      {title:'Shimmer',ideal:'1dB以下で安定',desc:'音量のブレ'},
       {title:'抑揚',ideal:'3〜10半音が自然',desc:'高低差（表現幅）'}
     ];
     rowsLeft.forEach((r,i)=>{
