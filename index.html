@@ -1946,9 +1946,9 @@ function drawHarmonicCanvas(r){
     const pitchIdeal=r.isFemale?'165〜260Hz':'85〜165Hz';
     const stats=[
       ['基音',`${Math.round(r.meanPitch)}Hz / ${pitchIdeal}`,pitchCol],
-      ['倍音数',`${r.detectedCount}/11`,countCol],
-      ['Jitter',`${r.jitter.toFixed(2)}% / 1.0%`,jitterCol],
-      ['Shimmer',`${r.shimmer.toFixed(1)}dB / 1.0dB`,shimmerCol],
+      ['倍音数',`${r.detectedCount}/11 / 9/11`,countCol],
+      ['Jitter',`${r.jitter.toFixed(2)}% / 1.0%以下`,jitterCol],
+      ['Shimmer',`${r.shimmer.toFixed(1)}dB / 1.0dB以下`,shimmerCol],
       ['抑揚',`${r.intonationSemitones.toFixed(1)}st / 3〜10st`,intoCol],
     ];
     const statW=(W-60)/stats.length;
@@ -1965,7 +1965,7 @@ function drawHarmonicCanvas(r){
   ctx.beginPath();ctx.moveTo(30,510);ctx.lineTo(W-30,510);ctx.stroke();
 
     // ── METRICS 目安（理想値＋説明） ──
-    const metricsTop=536;
+    const metricsTop=534;
     ctx.fillStyle='#cfe3ff';ctx.font='bold 10px monospace';ctx.textAlign='left';
     ctx.fillText('METRICS 目安（理想値 + 説明）',30,metricsTop-10);
     // セクション下線
@@ -1973,7 +1973,7 @@ function drawHarmonicCanvas(r){
     ctx.beginPath();ctx.moveTo(30,metricsTop-6);ctx.lineTo(W-30,metricsTop-6);ctx.stroke();
 
     const leftX=30,rightX=W/2+10;
-    const rowGap=26,subGap=14;
+    const rowGap=28,subGap=13;
     const rowsStart=metricsTop+18;
     const idealCol='#7eb8ff';
     const rowsLeft=[
@@ -2032,19 +2032,35 @@ function drawHarmonicCanvas(r){
       ctx.fillText('30Hz',specBox.x+2,specBox.y+specBox.h+12);
       ctx.textAlign='right';
       ctx.fillText(Math.round(maxFreqShow/1000)>=1?(maxFreqShow/1000).toFixed(1)+'kHz':Math.round(maxFreqShow)+'Hz',specBox.x+specBox.w-2,specBox.y+specBox.h+12);
-      ctx.textAlign='left';
+        ctx.textAlign='left';
+      }
     }
-  }
+
+    // 検出Hz（倍音）
+    if(r.harmonicRatios&&r.meanPitch){
+      const detected=[];
+      for(let i=1;i<r.harmonicRatios.length;i++){
+        if(r.harmonicRatios[i]>=0.10){
+          detected.push(Math.round(r.meanPitch*(i+1)));
+        }
+      }
+      const maxItems=10;
+      const list=detected.slice(0,maxItems).map(hz=>hz+'Hz').join(', ');
+      const tail=detected.length>maxItems?' …':'';
+      const label=detected.length?`検出Hz: ${list}${tail}`:'検出Hz: なし';
+      ctx.fillStyle='#7eb8ff';ctx.font='8px monospace';ctx.textAlign='left';
+      ctx.fillText(label,specBox.x,specBox.y+specBox.h+28);
+    }
 
   // ── フッター ──
   ctx.strokeStyle='#1e2330';ctx.lineWidth=1;
-    ctx.beginPath();ctx.moveTo(30,780);ctx.lineTo(W-30,780);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(30,830);ctx.lineTo(W-30,830);ctx.stroke();
   ctx.fillStyle='#2a3040';ctx.font='10px monospace';ctx.textAlign='center';
-    ctx.fillText('voice-analyzer-pro',W/2,800);
+    ctx.fillText('voice-analyzer-pro',W/2,850);
 
   // ── ハッシュタグ ──
   ctx.fillStyle='#1e3040';ctx.font='9px monospace';ctx.textAlign='center';
-    ctx.fillText('#ボイス診断  #声質分析  #VoiceAnalyzerPro',W/2,818);
+    ctx.fillText('#ボイス診断  #声質分析  #VoiceAnalyzerPro',W/2,868);
 
   // ── 下部グロー ──
   const grd2=ctx.createRadialGradient(W/2,H,0,W/2,H,200);
