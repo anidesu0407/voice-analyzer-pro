@@ -2215,7 +2215,7 @@ const VOICE_TYPES=[
     traitColor:'#ffd166',
     seiyuuM:['大塚明夫','中田譲治','堀内賢雄'],
     seiyuuF:['林原めぐみ','田中敦子','平野綾'],
-    match:({totalScore})=>totalScore>=79,
+    match:({totalScore})=>totalScore>=76,
   },
   {
     id:'deep_rich',
@@ -2228,7 +2228,7 @@ const VOICE_TYPES=[
     traitColor:'#7eb8ff',
     seiyuuM:['玄田哲章','津田健次郎','大塚芳忠'],
     seiyuuF:['内田真礼','朴璐美','甲斐田裕子'],
-    match:({safePitch,richScore,stabilityScore})=>safePitch<130&&richScore>=60&&stabilityScore>=55,
+    match:({safePitch,richScore,stabilityScore})=>safePitch<130&&richScore>=57&&stabilityScore>=52,
   },
   {
     id:'bright_tenor',
@@ -2241,7 +2241,7 @@ const VOICE_TYPES=[
     traitColor:'#ffd166',
     seiyuuM:['宮野真守','梶裕貴','神谷浩史'],
     seiyuuF:['水樹奈々','花澤香菜','雨宮天'],
-    match:({safePitch,richScore,intonationScore})=>safePitch>=130&&safePitch<230&&richScore>=60&&intonationScore>=50,
+    match:({safePitch,richScore,intonationScore})=>safePitch>=130&&safePitch<230&&richScore>=57&&intonationScore>=47,
   },
   {
     id:'silky',
@@ -2254,7 +2254,7 @@ const VOICE_TYPES=[
     traitColor:'#c084fc',
     seiyuuM:['中村悠一','石田彰','杉田智和'],
     seiyuuF:['坂本真綾','早見沙織','水瀬いのり'],
-    match:({stabilityScore,jitter,shimmer})=>stabilityScore>=75&&jitter<0.8&&shimmer<0.8,
+    match:({stabilityScore,jitter,shimmer})=>stabilityScore>=72&&jitter<0.85&&shimmer<0.85,
   },
   {
     id:'emotional',
@@ -2267,7 +2267,7 @@ const VOICE_TYPES=[
     traitColor:'#ff6b6b',
     seiyuuM:['山寺宏一','小野大輔','関智一'],
     seiyuuF:['沢城みゆき','能登麻美子','悠木碧'],
-    match:({intonationSemitones,intonationScore,richScore})=>intonationSemitones>=6&&intonationScore>=65&&richScore>=45,
+    match:({intonationSemitones,intonationScore,richScore})=>intonationSemitones>=5.5&&intonationScore>=62&&richScore>=42,
   },
   {
     id:'natural',
@@ -2280,7 +2280,7 @@ const VOICE_TYPES=[
     traitColor:'#4ff0b0',
     seiyuuM:['花江夏樹','梅原裕一郎','内山昂輝'],
     seiyuuF:['石川由依','東山奈央','鬼頭明里'],
-    match:({totalScore,richScore,stabilityScore})=>totalScore>=50&&richScore>=40&&stabilityScore>=45,
+    match:({totalScore,richScore,stabilityScore})=>totalScore>=47&&richScore>=37&&stabilityScore>=42,
   },
   {
     id:'husky',
@@ -2293,7 +2293,7 @@ const VOICE_TYPES=[
     traitColor:'#ffa040',
     seiyuuM:['置鮎龍太郎','緑川光','中井和哉'],
     seiyuuF:['上田麗奈','井上喜久子','小清水亜美'],
-    match:({shimmer,richScore})=>shimmer>=1.5&&richScore>=35,
+    match:({shimmer,richScore})=>shimmer>=1.4&&richScore>=32,
   },
   {
     id:'developing',
